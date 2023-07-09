@@ -9,10 +9,6 @@ router.get('/', async (req, res) => {
   // query the db to find all categories
   try{
     const getAllCategories = await Category.findAll({
-      where: {
-        id,
-        category_name,
-      },
       include: 
       [{ model: Product, attributes: ['product_name', 'id', 'price', 'stock', 'category_id']}]
     })
@@ -70,9 +66,9 @@ router.post('/', async (req, res) => {
   // create a new category
   try{
       const createNewCategory = await Category.create({
-        where: {
+        
         category_name: req.body.category_name,
-        },
+        
       })
       // test to see if the category was created
       if(createNewCategory[0] === 0){
@@ -98,10 +94,14 @@ router.put('/:id', async (req, res) => {
   // update a category by its `id` value
   try{
     const updateCategory = await Category.update({
+      
+      category_name: req.body.category_name
+    },
+    {
       where: {
         id: req.params.id,
-        category_name: req.body.category_name,
       },
+
     })
     // test to see if the category was updated
     if(updateCategory[0] === 0){
@@ -136,7 +136,7 @@ router.delete('/:id', async (req, res) => {
       } else {
         res
         .status(200)
-        .json(deleteCategory);
+        .json({ message: "category deleted"});
       }
   } catch(err){
     res

@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = require('../../../../../BootCampChallenges/E-Commerce/routes');
 // import sequelize connection
-
+const sequelize = require('./config/connection');
 
 require("dotenv").config();
 
@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(routes);
 
+sequelize.sync({ force: false })
 
 // sync sequelize models to the database, then turn on the server
 app.listen(PORT, () => {

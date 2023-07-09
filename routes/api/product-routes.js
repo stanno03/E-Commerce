@@ -9,17 +9,10 @@ router.get('/', async(req, res) => {
   // be sure to include its associated Category and Tag data
     try{
       const getAllProducts = await Product.findAll({
-        where: {
-          id: id,
-          product_name: product_name,
-          price: price,
-          stock: stock,
-          category_id: category_id,
-
-        },
+       
         include: 
         [{ model: Category, attributes: ['category_name', 'id']},
-         { model: Tag, attributes: ['tag_name', 'id'] }]
+         { model: Tag, attributes: ['tag_id', 'id'] }]
       })
     
       if(!getAllProducts){
@@ -33,7 +26,9 @@ router.get('/', async(req, res) => {
         .json(getAllProducts);
       }  
       } catch (err) {
-        res.status(500).json(err);
+        res
+        .status(500)
+        .json({ message: 'An error occurred', error: err.toString() })
     }
 });
 
@@ -48,7 +43,7 @@ router.get('/:id', async (req, res) => {
       },
       include: 
       [{ model: Category, attributes: ['category_name', 'id']},
-       { model: Tag, attributes: ['tag_name', 'id'] }]
+       { model: Tag, attributes: ['tag_id', 'id'] }]
     })
 
     if(!getOneProduct){
@@ -153,12 +148,12 @@ router.delete('/:id', async (req, res) => {
     })
     if(deleteProductByID[0] === 0){
       res
-      .status(404)
-      .json({ message: 'Error deleting product' });
+      .status(200)
+      .json({ message: 'Product deleted' });
   } else
     res
     .status(200)
-    .json(deleteProductByID, { message: 'Product deleted' });
+    .json(deleteProductByID, { message: 'Error deleting product' });
 
   } catch (err) {
     res.status(500).json(err);

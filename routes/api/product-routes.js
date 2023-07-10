@@ -158,7 +158,7 @@ router.delete('/:id', async (req, res) => {
    else
     res
     .status(200)
-    .json(deleteProductByID, { message: 'product deleted' });
+    .json({ message: 'product deleted' });
 
   } catch (err) {
     res.status(500).json(err);

@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
       if(createNewCategory){
         res
         .status(200)
-        .json(createNewCategory);
+        .json({ message: 'category created'});
       }
     // catch any errors
   } catch (err) {
@@ -112,7 +112,7 @@ router.put('/:id', async (req, res) => {
     if(updateCategory){
       res
       .status(200)
-      .json(updateCategory);
+      .json({ message: 'category updated'});
     }
   } catch(err) {
     res

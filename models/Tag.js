@@ -12,11 +12,13 @@ Tag.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    tag_name: {
+    
+    tag_name : {
     type: DataTypes.STRING,
+    allowNull: false,
       },
   },
-  
+
   {
     sequelize,
     timestamps: false,

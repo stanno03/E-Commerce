@@ -12,15 +12,13 @@ Tag.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    tag_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'tag',
-        key: 'id',
+    
+    tag_name : {
+    type: DataTypes.STRING,
+    allowNull: false,
       },
-    // define columns
   },
-},
+
   {
     sequelize,
     timestamps: false,

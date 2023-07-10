@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Tag, Product, ProductTag } = require('../../models');
+const { Tag, Product } = require('../../models');
 const { sync } = require('../../models/Product');
 
 // The `/api/tags` endpoint
@@ -8,18 +8,13 @@ router.get('/', async (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   try{
-    const getAllTags = await ProductTag.findAll({
-      where: {
-        id,
-        tag_id,
-      },
+    const getAllTags = await Tag.findAll({
       include: 
-      [{ model: Product, attributes: ['category_name', 'id']},
-       { model: Tag, attributes: ['tag_name', 'id'] }]
+      [{ model: Product, attributes: ['product_name', 'id', 'price', 'stock', 'category_id']}]
     })
   
     if(!getAllTags){
-      res
+      res  
       .status(404)
       .json({ message: 'No tags found' });
     }
@@ -37,13 +32,10 @@ router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try{
-    const getOneTagByID = await ProductTag.findOne({
-      where: {
-        id: req.params.id,
-      },
+    const getOneTagByID = await Tag.findOne({
+    
       include: 
-      [{ model: Product, attributes: ['category_name', 'id']},
-       { model: Tag, attributes: ['tag_name', 'id'] }]
+      [{ model: Product, attributes: ['product_name', 'id', 'price', 'stock', 'category_id']}]
     })
   
     if(!getOneTagByID){
@@ -68,14 +60,14 @@ router.post('/', async(req, res) => {
       tag_name: req.body.tag_name,
     })
   
-  if(createNewTag[0] === 0){
+  if(!createNewTag){
     res
-    .status(404)
+    .status(500)
     .json({ message: 'Error creating tag' });
   } else{
     res
     .status(200)
-    .json(createNewTag, { message: 'Tag created successfully' });
+    .json({ message: 'Tag created successfully' });
   }
   } catch (err) {
     res
@@ -105,10 +97,14 @@ router.delete('/:id', async (req, res) => {
         id: req.params.id,
       },
     })
-    if(deleteTagByID[0] === 0){
+    if(deleteTagByID === 0){
       res
       .status(404)
       .json({ message: 'Error deleting tag' });
+    } else {
+      res
+      .status(200)
+      .json({ message: 'Tag deleted successfully' });
     }
   } catch (err) { 
     res
